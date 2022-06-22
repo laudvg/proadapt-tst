@@ -59,6 +59,8 @@
     </div>
     <h6 style="font-size:.75rem">Next Hours Forecast</h6>
     <div class="forecast-cards">
+    </div>
+    <div class="forecast-cards">
       <forecast-card 
         :tempAve="forecast.main.temp" 
         :tempMin="forecast.main.temp_min"
@@ -67,6 +69,14 @@
         v-for="forecast in forecastData.list" v-bind:key="forecast.dt"
       ></forecast-card>
     </div>
+    <div class="forecast-cards">
+      <forecast5days
+        :tempAve="forecasts.temp.day"
+        :dateForecast="forecasts.dt"
+        
+        v-for="forecasts in forecast5daysData.daily.slice(0 , 5)" v-bind:key="forecasts.dt"
+      ></forecast5days>
+    </div>  
   </div>
   <div class="mt-2">
     <button type="button" class="btn btn-outline-primary btn-sm" @click="currentLocation()">
@@ -85,13 +95,17 @@ import ForecastCard from './ForecastCard.vue';
 import {forecastTypes} from '@/types/forecastTypes';
 import {getForecast} from '@/services/byForecastAPICall';
 import TimeAndDate from './TimeAndDate.vue';
+import Forecast5days from './Forecast5days.vue';
+import {get5DaysForecast} from '@/services/5dayForecastAPICall'
+import {forecast5Types} from '@/types/forecast5Types';
 
 export default defineComponent({
   name: 'DefaultWeather',
-  components: { 
+  components: {
     ForecastCard,
     TimeAndDate,
-  },
+    Forecast5days
+},
   data() {
     return {
       latitude: 1,
@@ -103,6 +117,7 @@ export default defineComponent({
       temp_min:1,
       temp_max:1,
       forecastData: {} as forecastTypes,
+      forecast5daysData: {} as forecast5Types,
     }
   },
   props: {
@@ -127,6 +142,7 @@ export default defineComponent({
       this.longitude = lng;
       this.getWeatherbyLocation();
       this.searchForecast();
+      this.search5daysForecast();
     },
 
     async getWeatherbyLocation():Promise<void>{
@@ -147,6 +163,12 @@ export default defineComponent({
     async searchForecast():Promise<void>{
       const value = await getForecast(this.latitude, this.longitude);
       this.forecastData = value;
+    },
+
+    async search5daysForecast():Promise<void>{
+      const value = await get5DaysForecast(this.latitude, this.longitude);
+      this.forecast5daysData = value;
+      console.log(this.forecast5daysData);
     },
 
     currentLocation(){
