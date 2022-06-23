@@ -1,12 +1,12 @@
 export interface weatherTypes {
     name: string;
     
-    weather: {
+    weather: [{
       id: number;
       main: string;
       description: string;
       icon: string;
-    };
+    }];
 
     main: {
       temp: number;
@@ -17,18 +17,9 @@ export interface weatherTypes {
       humidity: number;
     };
 
-    wind: {
-      speed: number;
-      deg: number;
-    };
-
     sys: {
       country: string;
       sunrise: number;
       sunset: number;
     };
-
-    clouds: {
-        all: number;
-    }
 }

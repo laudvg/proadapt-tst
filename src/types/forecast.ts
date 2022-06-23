@@ -1,4 +1,4 @@
-export interface forecast5Types {
+export interface forecast {
   lat: number,
   lon: number,
   timezone: string,
@@ -26,7 +26,7 @@ export interface forecast5Types {
         }
     ]
   },
-  daily: [
+  getForecast: [
     {
       dt: number,
       sunrise: number,

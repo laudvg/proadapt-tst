@@ -5,7 +5,7 @@
         <div class="col d-flex flex-column align-items-center">
           <div class="row">
               <div class="today-date mt-2 mb-0">
-                <h4>{{data.name}}, {{data.sys?.country}}</h4>
+                <h4>{{extraData.name}}, {{extraData.sys?.country}}</h4>
               </div>
           </div>
         </div>
@@ -14,22 +14,23 @@
       <div class="row">
         <div class="col d-flex flex-column align-items-center">
           <h1 class="temperature-now ml-3">
-            {{Math.round(data.main?.temp)}}&deg;
+            {{temperature}}&deg;
           </h1>
+          <h6>{{description}}</h6>
         </div>
       </div>
       <div class="info mt-4">
         <div class="row weather-description" style="margin-right:.02rem;">
           <div class="d-flex justify-content-end">
-            <h6>Humidity {{data.main?.humidity}}&nbsp;%</h6>
+            <h6>Humidity {{data.current?.humidity}}&nbsp;%</h6>
             <span class="material-icons-outlined md-14">water_drop</span>
           </div>
           <div class="d-flex justify-content-end">
-            <h6>Feels like  {{Math.round(data.main?.feels_like)}}&deg;</h6>
+            <h6>Feels like  {{Math.round(data.current?.feels_like)}}&deg;</h6>
             <span class="material-icons-outlined md-14">landscape</span>
           </div>
           <div class="d-flex justify-content-end">
-            <h6>Max {{Math.round(data.main?.temp_max)}}&deg;</h6>
+            <h6>Max {{temp_max}}&deg;</h6>
             <span class="material-icons-outlined md-14">arrow_upward</span>
           </div>
           <div class="d-flex justify-content-end">
@@ -40,15 +41,15 @@
         <div class="row weather-description" style="margin-left:.02rem;">
           <div class="d-flex justify-content-beggining">
             <span class="material-icons-outlined md-14">compare_arrows</span>
-            <h6>Press. {{data.main?.pressure}}&nbsp;hPa</h6>
+            <h6>Press. {{data.current?.pressure}}&nbsp;hPa</h6>
           </div>
           <div class="d-flex justify-content-beggining">
             <span class="material-icons-outlined md-14">cloud</span>
-            <h6>Clouds {{data.clouds?.all}}&nbsp;%</h6>
+            <h6>Clouds {{data.current?.clouds}}&nbsp;%</h6>
           </div>
           <div class="d-flex justify-content-beggining">
             <span class="material-icons-outlined md-14">arrow_downward</span>
-            <h6>Min {{Math.round(data.main?.temp_min)}}&deg;</h6>
+            <h6>Min {{temp_min}}&deg;</h6>
           </div>
           <div class="d-flex justify-content-beggining">
             <span class="material-icons-outlined md-14">nights_stay</span>
@@ -93,12 +94,12 @@ import {weatherTypes} from '../types/weatherTypes';
 import { getWeather } from '@/services/byLocationAPICall';
 import { searchtWeather } from '@/services/bySearchAPICall';
 // import ForecastCard from './ForecastCard.vue';
-// import {forecastTypes} from '@/types/forecastTypes';
+import {forecastTypes} from '@/types/forecastTypes';
 // import {getForecast} from '@/services/byForecastAPICall';
 import TimeAndDate from './TimeAndDate.vue';
 import Forecast5days from './Forecast5days.vue';
-import {get5DaysForecast} from '@/services/5dayForecastAPICall'
-import {forecast5Types} from '@/types/forecast5Types';
+import {getForecast} from '@/services/ForecastAPICall'
+import {forecast} from '@/types/forecast';
 
 export default defineComponent({
   name: 'DefaultWeather',
@@ -111,14 +112,15 @@ export default defineComponent({
     return {
       latitude: 1,
       longitude: 1,
-      data: {} as weatherTypes,
       date:'',
       hour:'',
       temperature: 1,
       temp_min:1,
       temp_max:1,
-      // forecastData: {} as forecastTypes,
-      forecast5daysData: {} as forecast5Types,
+      description: '',
+      data: {} as forecast,
+      extraData: {} as weatherTypes,
+      forecast5daysData: {} as forecast,
     }
   },
   props: {
@@ -141,22 +143,30 @@ export default defineComponent({
       const lat = position.coords.latitude;
       this.latitude = lat;
       this.longitude = lng;
-      this.getWeatherbyLocation();
+      this.getWeather();
       // this.searchForecast();
       this.search5daysForecast();
     },
 
-    async getWeatherbyLocation():Promise<void>{
-      const value = await getWeather(this.latitude, this.longitude);
+    async getWeather():Promise<void>{
+      const value = await getForecast(this.latitude, this.longitude);
+      const extraValues = await getWeather(this.latitude, this.longitude);
       this.data = value;
-      this.temperature = value.main.temp;
-      this.temp_min = value.main.temp_min;
-      this.temp_max = value.main.temp_max;
+      this.extraData = extraValues;
+      this.asignValues(value, extraValues);
+      console.log(this.extraData, "extra");
+    },
+
+    asignValues(valParam: any, extraParam: any):void {
+      this.temperature = Math.round(valParam.current.temp);
+      this.description = extraParam.weather[0].description;
+      this.temp_min = Math.round(extraParam.main.temp_min);
+      this.temp_max = Math.round(extraParam.main.temp_max);
     },
 
     async searchWeather():Promise<void>{
       const value = await searchtWeather(this.cityQuery);
-      this.data = value;
+      // this.data = value;
       // this.searchForecast();
       this.sunValues();
     },
@@ -167,13 +177,13 @@ export default defineComponent({
     // },
 
     async search5daysForecast():Promise<void>{
-      const value = await get5DaysForecast(this.latitude, this.longitude);
+      const value = await getForecast(this.latitude, this.longitude);
       this.forecast5daysData = value;
       console.log(this.forecast5daysData);
     },
 
     currentLocation(){
-      this.getWeatherbyLocation();
+      this.getWeather();
     },
 
     sunValues() : void {
@@ -190,12 +200,12 @@ export default defineComponent({
     },
 
     setSunrise(){
-      const sunrise = this.data.sys?.sunrise;
+      const sunrise = this.extraData.sys?.sunrise;
       return this.formatHours(sunrise);
     },
 
     setSunset(){
-      const sunset = this.data.sys?.sunset;
+      const sunset = this.extraData.sys?.sunset;
       return this.formatHours(sunset);
     },
   },
@@ -204,12 +214,12 @@ export default defineComponent({
   },
   watch: {
     longitude: {
-      immediate: true,
-      handler: 'getWeatherbyLocation',
+      deep: true,
+      handler: 'getWeather',
     },
     latitude: {
-      immediate: true,
-      handler: 'getWeatherbyLocation',
+      deep: true,
+      handler: 'getWeather',
     },
     cityQuery: {
       deep: true,
