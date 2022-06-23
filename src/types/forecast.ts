@@ -26,7 +26,7 @@ export interface forecast {
         }
     ]
   },
-  getForecast: [
+  daily: [
     {
       dt: number,
       sunrise: number,

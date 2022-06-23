@@ -1,6 +1,11 @@
 export interface weatherTypes {
     name: string;
     
+    coord: {
+      lon: number,
+      lat: number,
+    };
+
     weather: [{
       id: number;
       main: string;
@@ -17,9 +22,18 @@ export interface weatherTypes {
       humidity: number;
     };
 
+    wind: {
+      speed: number;
+      deg: number;
+    };
+
     sys: {
       country: string;
       sunrise: number;
       sunset: number;
+    };
+
+    clouds: {
+      all: number;
     };
 }
