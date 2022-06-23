@@ -73,8 +73,9 @@
       <forecast5days
         :tempAve="forecasts.temp.day"
         :dateForecast="forecasts.dt"
-        
-        v-for="forecasts in forecast5daysData.daily.slice(0 , 5)" v-bind:key="forecasts.dt"
+        :tempMin="forecasts.temp.min"
+        :tempMax="forecasts.temp.max"
+        v-for="forecasts in forecast5daysData.daily?.slice(0,5)" v-bind:key="forecasts.dt"
       ></forecast5days>
     </div>  
   </div>

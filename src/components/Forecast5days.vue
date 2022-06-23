@@ -1,9 +1,11 @@
 <template>
   <div class="card forecast-card bg-primary mb-2">
-      <h6 class="temp">{{tempAve}}&deg;</h6>
+      <h6 class="temp">{{Math.round(tempAve)}}&deg;</h6>
     <div class="min-max-val">
-      <h6 class="min-max">{{date}}</h6>
+    <h6 class="min-max">Min{{Math.round(tempMin)}}&deg;</h6>
+    <h6 class="min-max">Max{{Math.round(tempMax)}}&deg;</h6>
     </div>
+    <h6 class="min-max">{{date}}</h6>
   </div>
 </template>
 
@@ -14,6 +16,8 @@ export default defineComponent({
   name:'ForecastCard',
   props: {
     tempAve : Number,
+    tempMin: Number,
+    tempMax: Number,
     dateForecast: Number,
   },
   data(){
@@ -53,7 +57,7 @@ export default defineComponent({
 
 <style> 
   .min-max{
-    font-size: .75rem;
+    font-size: .5rem;
   }
   .temp{
     font-size: 2rem;
