@@ -60,7 +60,7 @@
     <h6 style="font-size:.75rem">Next Hours Forecast</h6>
     <div class="forecast-cards">
     </div>
-    <div class="forecast-cards">
+    <!-- <div class="forecast-cards">
       <forecast-card 
         :tempAve="forecast.main.temp" 
         :tempMin="forecast.main.temp_min"
@@ -68,7 +68,7 @@
         :day="forecast.dt"
         v-for="forecast in forecastData.list" v-bind:key="forecast.dt"
       ></forecast-card>
-    </div>
+    </div> -->
     <div class="forecast-cards">
       <forecast5days
         :tempAve="forecasts.temp.day"
@@ -92,9 +92,9 @@ import { defineComponent } from 'vue';
 import {weatherTypes} from '../types/weatherTypes';
 import { getWeather } from '@/services/byLocationAPICall';
 import { searchtWeather } from '@/services/bySearchAPICall';
-import ForecastCard from './ForecastCard.vue';
-import {forecastTypes} from '@/types/forecastTypes';
-import {getForecast} from '@/services/byForecastAPICall';
+// import ForecastCard from './ForecastCard.vue';
+// import {forecastTypes} from '@/types/forecastTypes';
+// import {getForecast} from '@/services/byForecastAPICall';
 import TimeAndDate from './TimeAndDate.vue';
 import Forecast5days from './Forecast5days.vue';
 import {get5DaysForecast} from '@/services/5dayForecastAPICall'
@@ -103,7 +103,7 @@ import {forecast5Types} from '@/types/forecast5Types';
 export default defineComponent({
   name: 'DefaultWeather',
   components: {
-    ForecastCard,
+    // ForecastCard,
     TimeAndDate,
     Forecast5days
 },
@@ -117,7 +117,7 @@ export default defineComponent({
       temperature: 1,
       temp_min:1,
       temp_max:1,
-      forecastData: {} as forecastTypes,
+      // forecastData: {} as forecastTypes,
       forecast5daysData: {} as forecast5Types,
     }
   },
@@ -142,7 +142,7 @@ export default defineComponent({
       this.latitude = lat;
       this.longitude = lng;
       this.getWeatherbyLocation();
-      this.searchForecast();
+      // this.searchForecast();
       this.search5daysForecast();
     },
 
@@ -157,14 +157,14 @@ export default defineComponent({
     async searchWeather():Promise<void>{
       const value = await searchtWeather(this.cityQuery);
       this.data = value;
-      this.searchForecast();
+      // this.searchForecast();
       this.sunValues();
     },
     
-    async searchForecast():Promise<void>{
-      const value = await getForecast(this.latitude, this.longitude);
-      this.forecastData = value;
-    },
+    // async searchForecast():Promise<void>{
+    //   const value = await getForecast(this.latitude, this.longitude);
+    //   this.forecastData = value;
+    // },
 
     async search5daysForecast():Promise<void>{
       const value = await get5DaysForecast(this.latitude, this.longitude);
