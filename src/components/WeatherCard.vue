@@ -13,8 +13,7 @@
       <time-and-date></time-and-date>
       <div class="row">
         <div class="col d-flex flex-column align-items-center" style="height: 10rem;">
-          <h1 class="temperature-now ml-3" style="height: 8rem;">{{temperature}}&deg;</h1>
-          <h6>{{description}}</h6>
+          <h1 class="temperature-now ml-3" style="height: 8rem;">{{Math.round(data.main?.temp)}}&deg;</h1>
         </div>
       </div>
       <div class="info mt-4">
@@ -24,11 +23,11 @@
             <span class="material-icons-outlined md-14">water_drop</span>
           </div>
           <div class="d-flex justify-content-end">
-            <h6>Feels like  {{feelsLike}}&deg;</h6>
+            <h6>Feels like {{Math.round(data.main?.feels_like)}}&deg;</h6>
             <span class="material-icons-outlined md-14">landscape</span>
           </div>
           <div class="d-flex justify-content-end">
-            <h6>Max {{temp_max}}&deg;</h6>
+            <h6>Max {{Math.round(data.main?.temp_max)}}&deg;</h6>
             <span class="material-icons-outlined md-14">arrow_upward</span>
           </div>
           <div class="d-flex justify-content-end">
@@ -47,7 +46,7 @@
           </div>
           <div class="d-flex justify-content-beggining">
             <span class="material-icons-outlined md-14">arrow_downward</span>
-            <h6>Min {{temp_min}}&deg;</h6>
+            <h6>Min {{Math.round(data.main?.temp_min)}}&deg;</h6>
           </div>
           <div class="d-flex justify-content-beggining">
             <span class="material-icons-outlined md-14">nights_stay</span>
@@ -150,16 +149,6 @@ export default defineComponent({
     async getWeather():Promise<void>{
       const value = await getWeather(this.latitude, this.longitude);
       this.data = value;
-      this.asignValues(value);
-      // console.log(this.data, "value");
-    },
-
-    asignValues(valueParam: any):void {
-      this.temperature = Math.round(valueParam.main.temp);
-      this.description = valueParam.weather[0].description;
-      this.temp_min = Math.round(valueParam.main.temp_min);
-      this.temp_max = Math.round(valueParam.main.temp_max);
-      this.feelsLike = Math.round(valueParam.main.feels_like)
     },
 
     async searchWeather():Promise<void>{
