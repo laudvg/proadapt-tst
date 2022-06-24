@@ -7,8 +7,8 @@ npm run build
 cd dist
 
 git init
-git add -A
+git add .
 git commit -m 'New Deployment'
-git push -f git@github.com:laudvg/proadapt-tst.git main:gh-pages
+git subtree push --prefix dist origin gh-page
 
 cd -
