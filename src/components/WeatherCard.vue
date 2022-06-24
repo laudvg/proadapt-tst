@@ -56,7 +56,7 @@
         </div>
       </div>
     </div>
-    <h6 style="font-size:.75rem">Next Hours Forecast</h6>
+    <h6 style="font-size:.75rem">Next Days Forecast</h6>
     <div class="forecast-cards">
     </div>
     <div class="d-flex flex-row" :class="{'flex-row-reverse':reverseOrder === false}" >
@@ -65,7 +65,7 @@
         :dateForecast="forecasts.dt"
         :tempMin="forecasts.temp.min"
         :tempMax="forecasts.temp.max"
-        v-for="forecasts in forecast5daysData.daily?.slice(0,5)" v-bind:key="forecasts.dt"
+        v-for="forecasts in forecast5daysData.daily?.slice(1,6)" v-bind:key="forecasts.dt"
       ></forecast5days>
     </div>
     <div class="order-buttons my-2">
