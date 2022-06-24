@@ -84,12 +84,12 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import {weatherTypes} from '../types/weatherTypes';
-import { getWeather } from '@/services/byLocationAPICall';
-import { searchtWeather } from '@/services/bySearchAPICall';
+import { getWeather } from '../services/byLocationAPICall';
+import { searchtWeather } from '../services/bySearchAPICall';
 import TimeAndDate from './TimeAndDate.vue';
 import Forecast5days from './Forecast5days.vue';
-import {getForecast} from '@/services/ForecastAPICall'
-import {forecast} from '@/types/forecast';
+import {getForecast} from '../services/ForecastAPICall'
+import {forecast} from '../types/forecast';
 
 export default defineComponent({
   name: 'DefaultWeather',
