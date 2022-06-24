@@ -6,3 +6,4 @@ export const getForecast = async (lat: number, lon: number): Promise <forecastTy
   .then(res => {
     return res.json();
   })
+  .catch((error) => console.log("error", error));

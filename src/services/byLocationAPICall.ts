@@ -6,4 +6,4 @@ export const getWeather = async (lat: number, lon: number): Promise <weatherType
   .then(res => {
     return res.json();
   })
- 
+ .catch((error) => console.log("error", error));
