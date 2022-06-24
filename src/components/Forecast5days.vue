@@ -3,7 +3,7 @@
       <h6 class="temp">{{Math.round(tempAve)}}&deg;</h6>
     <div class="min-max-val">
     <h6 class="min-max">Min{{Math.round(tempMin)}}&deg;</h6>
-    <h6 class="min-max">Max{{Math.round(tempMax)}}&deg;</h6>
+    <h6 class="min-max">Max{{Math.round(tempMax) }}&deg;</h6>
     </div>
     <h6 class="min-max">{{date}}</h6>
   </div>

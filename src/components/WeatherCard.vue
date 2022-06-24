@@ -186,7 +186,8 @@ export default defineComponent({
 });
 </script>
 
-<style>
+<style scoped>
+
 .weather-now-card{
   width: 25rem;
   height:38rem;
