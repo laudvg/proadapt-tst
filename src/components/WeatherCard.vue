@@ -73,10 +73,6 @@
         <button type="button" class="mx-2 btn btn-light btn-sm" style="font-size:.75rem" @click="reverseOrder = false">Descendant</button>
     </div>
   </div>
-  <!-- <div class="mt-2" >
-      <button type="button" @click="sortLowest"> sort Lowest</button>
-      <button @click="sortHigest"> sort Higest</button>
-  </div> -->
   <div class="mt-2">
     <button type="button" class="btn btn-outline-primary btn-sm" @click="currentLocation()">
           Go to the weather of your current location
@@ -90,9 +86,6 @@ import { defineComponent } from 'vue';
 import {weatherTypes} from '../types/weatherTypes';
 import { getWeather } from '@/services/byLocationAPICall';
 import { searchtWeather } from '@/services/bySearchAPICall';
-// import ForecastCard from './ForecastCard.vue';
-// import {forecastTypes} from '@/types/forecastTypes';
-// import {getForecast} from '@/services/byForecastAPICall';
 import TimeAndDate from './TimeAndDate.vue';
 import Forecast5days from './Forecast5days.vue';
 import {getForecast} from '@/services/ForecastAPICall'
@@ -101,20 +94,13 @@ import {forecast} from '@/types/forecast';
 export default defineComponent({
   name: 'DefaultWeather',
   components: {
-    // ForecastCard,
     TimeAndDate,
     Forecast5days
 },
   data() {
     return {
-      latitude: 1,
-      longitude: 1,
       date:'',
       hour:'',
-      temperature: 1,
-      temp_min: 1,
-      temp_max: 1,
-      feelsLike: 1,
       description: '',
       data: {} as weatherTypes,
       forecast5daysData: {} as forecast,
@@ -126,47 +112,39 @@ export default defineComponent({
       type: String,
       default: 'Berlin',
     },
+    latitude: {
+      type: Number,
+      default: 1,
+    },
+    longitude: {
+      type: Number,
+      default: 1,
+    }
+  },
+  created(){
+    this.asignGeolocalization();
   },
   methods: {
-    getGeolocalization(): void {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(this.asignGeolocalization);
-      } else {
-        alert("The app requieres the Geolocation to continue");
-      }
-    },
-
-    asignGeolocalization(position: any): void {
-      const lng = position.coords.longitude;
-      const lat = position.coords.latitude;
-      this.latitude = lat;
-      this.longitude = lng;
+    asignGeolocalization(): void {
       this.getWeather();
       this.search5daysForecast(this.latitude, this.longitude);
-      // this.searchForecast();
     },
 
     async getWeather():Promise<void>{
       const value = await getWeather(this.latitude, this.longitude);
       this.data = value;
+      console.log(this.data);
     },
 
     async searchWeather():Promise<void>{
       const value = await searchtWeather(this.cityQuery);
       this.data = value;
       this.search5daysForecast(value.coord.lat, value.coord.lon);
-      // this.searchForecast();
     },
-    
-    // async searchForecast():Promise<void>{
-    //   const value = await getForecast(this.latitude, this.longitude);
-    //   this.forecastData = value;
-    // },
 
     async search5daysForecast(latitude:number, longitude: number):Promise<void>{
       const value = await getForecast(latitude, longitude);
       this.forecast5daysData = value;
-      console.log(this.forecast5daysData);
     },
 
     currentLocation() {
@@ -190,9 +168,6 @@ export default defineComponent({
       const sunset = this.data.sys?.sunset;
       return this.formatHours(sunset);
     },
-  },
-  created(){
-    this.getGeolocalization();
   },
   watch: {
     longitude: {
